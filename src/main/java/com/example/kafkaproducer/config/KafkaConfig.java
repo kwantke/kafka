@@ -2,21 +2,45 @@ package com.example.kafkaproducer.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.streams.StreamsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.annotation.EnableKafkaStreams;
+import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.config.KafkaStreamsConfiguration;
 import org.springframework.kafka.core.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@EnableKafka
+//@EnableKafka
+@EnableKafkaStreams
 public class KafkaConfig {
 
+  @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
+  public KafkaStreamsConfiguration myKStreamConfig() {
+    Map<String, Object> myKStreamConfig = new HashMap<>();
+    myKStreamConfig.put(StreamsConfig.APPLICATION_ID_CONFIG, "stream-test");
+    myKStreamConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092, 192.168.56.102:9092, 192.168.56.103:9092");
+    myKStreamConfig.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+    myKStreamConfig.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+    myKStreamConfig.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 3);
+
+    return new KafkaStreamsConfiguration(myKStreamConfig);
+  }
+
+
+
+
+
+/*
+  kafka streams 를 사용할것으로 아래 구성은 사용 안함으로 주석처리함
   @Bean
   public KafkaTemplate<String, Object> kafkaTemplate() {
     return new KafkaTemplate<String, Object>(producerFactory());
@@ -65,5 +89,5 @@ public class KafkaConfig {
     myFactory.setConsumerFactory(consumerFactory());
 
     return myFactory;
-  }
+  }*/
 }

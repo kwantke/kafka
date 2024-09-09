@@ -24,7 +24,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 
+	//kafka-stream
+	// https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams
+	implementation 'org.apache.kafka:kafka-streams'
+
 	//lombok
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
 	implementation 'org.springframework.boot:spring-boot-starter'
